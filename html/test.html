@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mocha Tests</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mocha/6.0.1/mocha.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="https://www.chaijs.com/chai.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/6.0.1/mocha.js"></script>
+    <script>mocha.setup('bdd')</script>
+    <script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../js/helper.js"></script>
+    <script type="text/javascript" src="../js/reserva.js"></script>
+    <script type="text/javascript" src="../js/restaurant.js"></script>
+    <script type="text/javascript" src="../js/listado.js"></script>
+    <script type="text/javascript" src="../js/aplicacion.js"></script>
+
+    <script type="text/javascript" src="../js/test.js"></script>
+
+    <script>
+      window.onload = function() {
+        mocha.run()
+      };
+    </script>
+  </body>
+</html>
