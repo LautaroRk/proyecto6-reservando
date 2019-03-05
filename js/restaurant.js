@@ -1,4 +1,4 @@
-let Restaurant = function(id, nombre, rubro, ubicacion, horarios, imagen, calificaciones) {
+let Restaurant = function(id, nombre, rubro, ubicacion, horarios, imagen, calificaciones, precioPorPersona) {
     this.id = id;
     this.nombre = nombre;
     this.rubro = rubro;
@@ -7,10 +7,19 @@ let Restaurant = function(id, nombre, rubro, ubicacion, horarios, imagen, califi
     this.reservas = [];
     this.imagen = imagen;
     this.calificaciones = calificaciones;
+    this.precioPorPersona = precioPorPersona;
 }
 
-Restaurant.prototype.reservarHorario = function(horarioReservado) {
-    this.horarios = this.horarios.filter(horario => horario !== horarioReservado);
+Restaurant.prototype.reservarHorario = function(props) {
+    if(!props) return;
+    this.horarios = this.horarios.filter(horario => horario !== props.horario);
+    
+    let fecha = new Date();
+    fecha.setHours(props.horario.split(':')[0]);
+    fecha.setMinutes(props.horario.split(':')[1]);
+    fecha.setSeconds(0);
+
+    this.reservas.push(new Reserva(this.nombre, fecha, props.cantidad, this.precioPorPersona, props.cupon));
 }
 
 Restaurant.prototype.calificar = function(nuevaCalificacion) {

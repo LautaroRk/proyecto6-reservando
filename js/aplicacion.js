@@ -58,14 +58,16 @@ Aplicacion.prototype.crearTarjetaDeRestaurante = function(restaurant) {
                 </div>
             </div>
             <div class="informacion-container">
-                <span><i class="fas fa-map-marker-alt"></i></span>
+                <span><i class="fas fa-map-marker-alt" title="Ciudad"></i></span>
                 <span class="ubicacion">${restaurant.ubicacion}</span>
-                <span><i class="fas fa-utensils"></i></span>
+                <span><i class="fas fa-utensils" title="Rubro"></i></span>
                 <span class="rubro">${restaurant.rubro}</span>
+                <span><i class="fas fa-dollar-sign" title="Precio por persona"></i></span>
+                <span class="precio">${restaurant.precioPorPersona}</span>
             </div>
         </div>
         <div class="reservas">
-            <span class="reserva">¡Reserva tu lugar!</span>
+            <span class="reserva">¡Reserva mesa para hoy!</span>
             <div class="horarios-container">
             </div>
         </div>
@@ -84,7 +86,46 @@ Aplicacion.prototype.crearTarjetaDeRestaurante = function(restaurant) {
     restaurant.horarios.sort().forEach(function(horario) {
         let nuevoHorario = $("<span/>").attr("class", "horario").html(horario);
         nuevoHorario.click(function() {
-            self.reservarUnHorario(restaurant, horario);
+            let props = {
+                restaurant: restaurant,
+                horario: horario,
+                cantidad: 1,
+                cupon: null
+            }
+            swal("Ingrese la cantidad de comensales (máximo de 20 personas) :", {
+                content: "input",
+            }).then((cant) => {
+                let cantidad = parseInt(cant);
+                if (cantidad >= 1 && cantidad <= 20) {
+                    props.cantidad = cantidad;
+                    swal("Si tiene un código de descuento, ingreselo aquí :", {
+                        content: "input",
+                        buttons: {
+                            cancel: "No tengo",
+                            confirm: "Aplicar"
+                        }
+                    }).then((cup) => {
+                        if (cup === null || Reserva.prototype.cuponesValidos.includes(cup)) {
+                            props.cupon = cup;
+                            self.reservarUnHorario(props);
+                        } else {
+                            swal({
+                                title: "Error",
+                                text: "Código inválido.",
+                                icon: "error",
+                                button: "Continuar",
+                            });
+                        }
+                    });
+                } else {
+                    swal({
+                        title: "Error",
+                        text: cantidad > 20 ? "El máximo es de 20 personas." : "Ingrese un número válido.",
+                        icon: "error",
+                        button: "Continuar",
+                    });
+                }
+            });
         })
         nuevoHorario.appendTo(contenedorHorarios);
     });
@@ -116,13 +157,13 @@ Aplicacion.prototype.calificarRestaurant = function(restaurant) {
 }
 
 //Esta función se encarga de enviarle un mensaje al listado para que reserve un horario de un determinado restaurant
-Aplicacion.prototype.reservarUnHorario = function(restaurant, horario) {
-    this.listado.reservarUnHorario(restaurant.id, horario)
+Aplicacion.prototype.reservarUnHorario = function(props) {
+    this.listado.reservarUnHorario(props);
 
     //Se obtiene elemento que se corresponde con el id del restaurante al que se va a reservar el horario
-    let restaurantActualizar = $("#" + restaurant.id);
+    let restaurantActualizar = $("#" + props.restaurant.id);
     //Se busca el elemento HTML que contiene el horario que se va a sacar
-    let horarioASacar = restaurantActualizar.find("span:contains(" + horario + ")")
+    let horarioASacar = restaurantActualizar.find("span:contains(" + props.horario + ")")
         //Se verifica si quedó algún horario disponible. En el caso de que no, se agrega el mensajde de "No hay mas horarios disponibles"
     let cantidadHorarios = restaurantActualizar.find(".horario").length;
     if (cantidadHorarios === 1) {
@@ -132,7 +173,7 @@ Aplicacion.prototype.reservarUnHorario = function(restaurant, horario) {
 
     swal({
         title: "!Felicitaciones!",
-        text: "Has reservado una mesa en " + restaurant.nombre + " a las " + horario,
+        text: "Has reservado una mesa en " + props.restaurant.nombre + " a las " + props.horario,
         icon: "success",
         button: "Continuar",
     });

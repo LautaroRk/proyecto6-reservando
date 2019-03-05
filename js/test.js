@@ -9,13 +9,13 @@ describe('Tests Restaurant', function(){
     context('.reservarHorario(horario)', function(){
 
         it('Si se reserva un horario existente, el horario es eliminado del arreglo', function(){
-            restaurant.reservarHorario('15:30');
+            restaurant.reservarHorario({horario:'15:30'});
             expect(restaurant.horarios).to.not.include('15:30');
         });
     
         it('Si se reserva un horario inexistente, el arreglo se mantiene igual', function(){
             let horariosAnterior = restaurant.horarios;
-            restaurant.reservarHorario('20:00');
+            restaurant.reservarHorario({horario:'20:00'});
             expect(restaurant.horarios).to.eql(horariosAnterior);
         });
     
@@ -142,11 +142,11 @@ describe('Tests Listado', function(){
 describe('Tests Reserva', function(){
     
     beforeEach(function(){
-        reserva = new Reserva (new Date(2018, 7, 28, 16, 00), 1, 500); //Martes 16:00hs
-        reserva1 = new Reserva (new Date(2018, 7, 27, 14, 00), 2, 150, "DES200"); //Lunes 14:00hs
-        reserva2 = new Reserva (new Date(2018, 7, 23, 11, 00), 3, 300, "DES1"); //Viernes 11:00hs
-        reserva3 = new Reserva (new Date(2019, 2, 3, 13, 30), 1, 100); //Domingo 13:30hs
-        reserva4 = new Reserva (new Date(2019, 2, 3, 13, 30), 7, 100, "DES15"); //Domingo 13:30hs
+        reserva = new Reserva ('Lo de Bubi', new Date(2018, 7, 28, 16, 00), 1, 500); //Martes 16:00hs
+        reserva1 = new Reserva ('Lo de Bubi', new Date(2018, 7, 27, 14, 00), 2, 150, "DES200"); //Lunes 14:00hs
+        reserva2 = new Reserva ('Lo de Bubi', new Date(2018, 7, 23, 11, 00), 3, 300, "DES1"); //Viernes 11:00hs
+        reserva3 = new Reserva ('Lo de Bubi', new Date(2019, 2, 3, 13, 30), 1, 100); //Domingo 13:30hs
+        reserva4 = new Reserva ('Lo de Bubi', new Date(2019, 2, 3, 13, 30), 7, 100, "DES15"); //Domingo 13:30hs
     });
 
     context('.obtenerPrecioBase()', function(){

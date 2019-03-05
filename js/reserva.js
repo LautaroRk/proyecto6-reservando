@@ -1,4 +1,5 @@
-let Reserva = function(fecha, cantidad, precioPorPersona, cupon) {
+let Reserva = function(restaurant, fecha, cantidad, precioPorPersona, cupon) {
+    this.restaurant = restaurant;
     this.fecha = fecha;
     this.cantidad = cantidad;
     this.precioPorPersona = precioPorPersona;
@@ -35,6 +36,8 @@ Reserva.prototype.calcularAdicionales = function(precioBase) {
     return adicionalTotal;
 }
 
+Reserva.prototype.cuponesValidos = ['DES15','DES200','DES1'];
+
 Reserva.prototype.calcularDescuentos = function(precioBase) {
     let descuentoTotal = 0;
 
@@ -67,11 +70,7 @@ Reserva.prototype.calcularDescuentos = function(precioBase) {
             descuentoTotal += this.precioPorPersona;
             break;
 
-        case undefined:
-            break;
-
         default:
-            alert('Cupón inválido.');
             break;
     }
 

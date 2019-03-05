@@ -140,6 +140,15 @@ select{
   font-family: 'Open Sans', sans-serif;
   color:grey;
   margin-left: 5px;
+  margin-right: 10px;
+  color: #aa0024;
+}
+
+.precio{
+  font-size: 13px;
+  font-family: 'Open Sans', sans-serif;
+  color:grey;
+  margin-left: 2px;
   color: #aa0024;
 }
 
