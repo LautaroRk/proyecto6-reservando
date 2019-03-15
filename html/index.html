@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Restaurantes</title>
+        <title>Reservando</title>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="../css/style.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -10,26 +10,34 @@
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     </head>
     <body>
-        <div class="icon-container">
-            <img src="../img/tray.svg"  class="icon"/>
-            <h1>Reservando</h1>
-        </div>
-        <div class="contenedor-filtros">
-            <div class="flex-filtros">
-                <select id="filtro-ciudad">
-                </select>
-                <select id="filtro-rubro">
-                </select>
-                <select id="filtro-horario">
-                </select>
-                <button class="buscar">Buscar</button>
+        <div id="view-home">
+            <div class="icon-container">
+                <img src="../img/tray.svg"  class="icon"/>
+                <h1>Reservando</h1>
+            </div>
+            <div class="contenedor-filtros">
+                <div class="flex-filtros">
+                    <select id="filtro-ciudad">
+                    </select>
+                    <select id="filtro-rubro">
+                    </select>
+                    <select id="filtro-horario">
+                    </select>
+                    <button class="buscar">Buscar</button>
+                    <button class="mis-reservas">Mis reservas</button>
+                </div>
+            </div>
+            
+            <div class="contenedor-restaurantes">
+                <div class="flex">
+                </div>
             </div>
         </div>
-        
-        <div class="contenedor-restaurantes">
-            <div class="flex">
-            </div>
+        <div id="view-reservas">
+            <ul class="lista-reservas"></ul>
+            <button class="cerrar">Cerrar</button>
         </div>
+
         <script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
         <script type="text/javascript" src="../js/helper.js"></script>
         <script type="text/javascript" src="../js/reserva.js"></script>

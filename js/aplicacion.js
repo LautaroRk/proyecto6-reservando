@@ -1,21 +1,59 @@
 let Aplicacion = function(listado) {
-        this.listado = listado;
-        this.dibujarListado(listado.restaurantes)
-        this.dibujarFiltros();
-        this.registrarEventos();
+    this.listado = listado;
+    this.dibujarListado(listado.restaurantes)
+    this.dibujarFiltros();
+    this.registrarEventos();
+    this.ocultarReservas();
+}
 
-    }
-    //Esta función le asigna al botón "Buscar" la función filtrarRestaurantes()
+//Esta función le asigna al botón "Buscar" la función filtrarRestaurantes()
+//y al boton "Mis reservas" la función mostrarListaDeReservas()
 Aplicacion.prototype.registrarEventos = function() {
     $(".buscar").click(this.filtrarRestaurantes.bind(this));
+    $(".mis-reservas").click(this.mostrarReservas.bind(this));
+    $(".cerrar").click(this.ocultarReservas.bind(this));
 }
+
+
+Aplicacion.prototype.mostrarReservas = function() {
+    let listaReservas = this.listado.listarReservas();
+    let $ulReservas = $(".lista-reservas");
+    let html = '';
+    
+    if(listaReservas.length) {
+        listaReservas.forEach((reserva) => {
+            html = html.concat(`<li><b>${horarioDosDigitos(reserva.fecha)}hs</b> \u00A0\u00A0\u00A0\u00A0\u00A0 en <b>${reserva.restaurant.nombre}</b> para <b>${reserva.cantidad} personas</b> <span>Precio final: \u00A0 <b>$${reserva.obtenerPrecioFinal()}</b></span></li>`);
+        })
+    
+        $ulReservas.html(html);
+        $("#view-reservas").slideDown({
+            start: function () {
+              $(this).css({
+                display: "flex"
+              })
+            }
+          });
+        $("#view-home").hide();
+    } else {
+        swal({
+            title: "¡Todavía no hiciste ninguna reserva!",
+            icon: "error"
+        });
+    }
+}
+
+
+Aplicacion.prototype.ocultarReservas = function() {
+    $("#view-home").show();
+    $("#view-reservas").slideUp();
+}
+
 
 //Esta función llama a las funciones que se encargan de cargar las opciones de los filtros
 Aplicacion.prototype.dibujarFiltros = function() {
     this.dibujarHorarios();
     this.dibujarRubros();
     this.dibujarCiudades();
-
 }
 
 //Función que se encarga de dibujar todos los restaurantes que recibe por parámetro. Cuando hablamos de dibujar, nos referimos a crear
@@ -89,47 +127,55 @@ Aplicacion.prototype.crearTarjetaDeRestaurante = function(restaurant) {
             let props = {
                 restaurant: restaurant,
                 horario: horario,
-                cantidad: 1,
+                cantidad: 0,
                 cupon: null
             }
-            swal("Ingrese la cantidad de comensales (máximo de 20 personas) :", {
-                content: "input",
-            }).then((cant) => {
-                let cantidad = parseInt(cant);
-                if (cantidad >= 1 && cantidad <= 20) {
-                    props.cantidad = cantidad;
-                    swal("Si tiene un código de descuento, ingreselo aquí :", {
-                        content: "input",
-                        buttons: {
-                            cancel: "No tengo",
-                            confirm: "Aplicar"
-                        }
-                    }).then((cup) => {
-                        if (cup === null || Reserva.prototype.cuponesValidos.includes(cup)) {
-                            props.cupon = cup;
-                            self.reservarUnHorario(props);
-                        } else {
-                            swal({
-                                title: "Error",
-                                text: "Código inválido.",
-                                icon: "error",
-                                button: "Continuar",
-                            });
-                        }
-                    });
-                } else {
-                    swal({
-                        title: "Error",
-                        text: cantidad > 20 ? "El máximo es de 20 personas." : "Ingrese un número válido.",
-                        icon: "error",
-                        button: "Continuar",
-                    });
-                }
-            });
+            self.inputCantidad(props);
         })
         nuevoHorario.appendTo(contenedorHorarios);
     });
     return card;
+}
+
+Aplicacion.prototype.inputCantidad = function(props) {
+    swal("¿Cuántos son?","Ingrese la cantidad de comensales (máximo 20)", {
+        content: "input",
+    }).then((cant) => {
+        let cantidad = parseInt(cant);
+        if (cantidad >= 1 && cantidad <= 20) {
+            props.cantidad = cantidad;
+            this.inputCupon(props);
+        } else {
+            swal({
+                title: "Error",
+                text: cantidad > 20 ? "El máximo es de 20 personas." : "Ingrese un número válido.",
+                icon: "error",
+                button: "Continuar",
+            });
+        }
+    });
+}
+
+Aplicacion.prototype.inputCupon = function(props) {
+    swal("Cupón de descuento","Si tiene un cupón de descuento, ingrese el código a continuación:", {
+        content: "input",
+        buttons: {
+            cancel: "No tengo",
+            confirm: "Aplicar"
+        }
+    }).then((cup) => {
+        if (cup === null || Reserva.prototype.cuponesValidos.includes(cup)) {
+            props.cupon = cup;
+            this.reservarUnHorario(props);
+        } else {
+            swal({
+                title: "Error",
+                text: "Código inválido.",
+                icon: "error",
+                button: "Continuar",
+            });
+        }
+    });
 }
 
 //Esta función muestra la alerta para dar la posibilidad de calificar un restaurant. La alerta que se utilizó es de la biblioteca "SweetAlert".
@@ -154,6 +200,28 @@ Aplicacion.prototype.calificarRestaurant = function(restaurant) {
             });
         }
     });
+
+    // Version SweetAlert2
+    
+    // Swal.fire({
+    //     title: "Ingrese su calificación (valor numérico entre 1 y 10) :",
+    //     input: 'number',
+    //     inputPlaceholder: '1 al 10',
+    //     showCancelButton: true,
+    //     inputValidator: (calif) => {
+    //       return new Promise((resolve) => {
+    //         if (calif >= 1 && calif <= 10 ) {
+    //           var nuevaCalificacion = parseInt(calif);
+    //           self.listado.calificarRestaurant(restaurant.id, nuevaCalificacion);
+    //           var restaurantActualizar = $("#" + restaurant.id);
+    //           restaurantActualizar.find(".puntuacion").html(restaurant.obtenerPuntuacion());
+    //           resolve()
+    //         } else {
+    //           resolve('Ingrese una calificación válida')
+    //         }
+    //       })
+    //     }
+    //   });
 }
 
 //Esta función se encarga de enviarle un mensaje al listado para que reserve un horario de un determinado restaurant
@@ -173,7 +241,7 @@ Aplicacion.prototype.reservarUnHorario = function(props) {
 
     swal({
         title: "!Felicitaciones!",
-        text: "Has reservado una mesa en " + props.restaurant.nombre + " a las " + props.horario,
+        text: `Has reservado una mesa ${props.cantidad > 1 ? `para ${props.cantidad} personas` : ''} en ${props.restaurant.nombre} a las ${props.horario}hs`,
         icon: "success",
         button: "Continuar",
     });

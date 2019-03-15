@@ -108,7 +108,18 @@ let listadoDeRestaurantes = [
 ];
 
 Listado.prototype.listarReservas = function() {
-    this.restaurantes.forEach(restaurant => restaurant.reservas.forEach(reserva => console.log(reserva)));
+    let listaDeReservas = [
+        // new Reserva(listadoDeRestaurantes[0], new Date(), 2, 100),
+        // new Reserva(listadoDeRestaurantes[1], new Date(), 2, 100),
+        // new Reserva(listadoDeRestaurantes[2], new Date(), 2, 100),
+        // new Reserva(listadoDeRestaurantes[3], new Date(), 2, 100),
+        // new Reserva(listadoDeRestaurantes[4], new Date(), 2, 100),
+        // new Reserva(listadoDeRestaurantes[0], new Date(), 2, 100)
+    ];
+    this.restaurantes.forEach(restaurant => restaurant.reservas.forEach(reserva => listaDeReservas.push(reserva)));
+    let listaDeReservasOrdenada = listaDeReservas.sort((a,b) => a.fecha - b.fecha);
+
+    return listaDeReservasOrdenada;
 }
 
 //Se crea un nuevo listado, asignandole el listado de restaurantes creado anteriormente.

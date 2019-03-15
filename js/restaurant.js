@@ -19,7 +19,7 @@ Restaurant.prototype.reservarHorario = function(props) {
     fecha.setMinutes(props.horario.split(':')[1]);
     fecha.setSeconds(0);
 
-    this.reservas.push(new Reserva(this.nombre, fecha, props.cantidad, this.precioPorPersona, props.cupon));
+    this.reservas.push(new Reserva(this, fecha, props.cantidad, this.precioPorPersona, props.cupon));
 }
 
 Restaurant.prototype.calificar = function(nuevaCalificacion) {

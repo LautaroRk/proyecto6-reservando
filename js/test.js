@@ -144,7 +144,7 @@ describe('Tests Reserva', function(){
     beforeEach(function(){
         reserva = new Reserva ('Lo de Bubi', new Date(2018, 7, 28, 16, 00), 1, 500); //Martes 16:00hs
         reserva1 = new Reserva ('Lo de Bubi', new Date(2018, 7, 27, 14, 00), 2, 150, "DES200"); //Lunes 14:00hs
-        reserva2 = new Reserva ('Lo de Bubi', new Date(2018, 7, 23, 11, 00), 3, 300, "DES1"); //Viernes 11:00hs
+        reserva2 = new Reserva ('Lo de Bubi', new Date(2018, 7, 23, 11, 00), 3, 300, "DES1"); //Jueves 11:00hs
         reserva3 = new Reserva ('Lo de Bubi', new Date(2019, 2, 3, 13, 30), 1, 100); //Domingo 13:30hs
         reserva4 = new Reserva ('Lo de Bubi', new Date(2019, 2, 3, 13, 30), 7, 100, "DES15"); //Domingo 13:30hs
     });
@@ -178,13 +178,4 @@ describe('Tests Reserva', function(){
             expect(reserva4.obtenerPrecioFinal()).to.equal(630);
         })
     });
-
-    // context('.aplicarDescuento(precioBase, codigoDeDescuento)', function(){
-
-    //     it('Aplica correctamente el descuento DES200', function(){
-    //         let precioBase = reserva1.obtenerPrecioBase();
-    //         expect(aplicarDescuento(precioBase, 'DES200').to.equal(100));
-    //     });
-
-    // });
 });
