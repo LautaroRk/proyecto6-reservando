@@ -21,8 +21,20 @@ Aplicacion.prototype.mostrarReservas = function() {
     let html = '';
     
     if(listaReservas.length) {
+        html = `<tr>
+                    <th>Hora</th>
+                    <th>Lugar</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                </tr>`;
         listaReservas.forEach((reserva) => {
-            html = html.concat(`<li><b>${horarioDosDigitos(reserva.fecha)}hs</b> \u00A0\u00A0\u00A0\u00A0\u00A0 en <b>${reserva.restaurant.nombre}</b> para <b>${reserva.cantidad} personas</b> <span>Precio final: \u00A0 <b>$${reserva.obtenerPrecioFinal()}</b></span></li>`);
+            html = html.concat(
+                `<tr class="contenedor-reserva">
+                    <td class="reserva-horario">${horarioDosDigitos(reserva.fecha)}hs</td>
+                    <td class="reserva-restaurante">${reserva.restaurant.nombre}</td>
+                    <td class="reserva-cantidad">${reserva.cantidad} personas</td>
+                    <td class="reserva-precio">$${reserva.obtenerPrecioFinal()}</td>
+                </tr>`);
         })
     
         $ulReservas.html(html);
@@ -200,28 +212,6 @@ Aplicacion.prototype.calificarRestaurant = function(restaurant) {
             });
         }
     });
-
-    // Version SweetAlert2
-    
-    // Swal.fire({
-    //     title: "Ingrese su calificación (valor numérico entre 1 y 10) :",
-    //     input: 'number',
-    //     inputPlaceholder: '1 al 10',
-    //     showCancelButton: true,
-    //     inputValidator: (calif) => {
-    //       return new Promise((resolve) => {
-    //         if (calif >= 1 && calif <= 10 ) {
-    //           var nuevaCalificacion = parseInt(calif);
-    //           self.listado.calificarRestaurant(restaurant.id, nuevaCalificacion);
-    //           var restaurantActualizar = $("#" + restaurant.id);
-    //           restaurantActualizar.find(".puntuacion").html(restaurant.obtenerPuntuacion());
-    //           resolve()
-    //         } else {
-    //           resolve('Ingrese una calificación válida')
-    //         }
-    //       })
-    //     }
-    //   });
 }
 
 //Esta función se encarga de enviarle un mensaje al listado para que reserve un horario de un determinado restaurant
